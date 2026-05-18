@@ -56,20 +56,34 @@ transparent 65%);
 z-index:-2;
 }
 
-/* CENTRAL ASCII BACKGROUND */
+/* ASCII */
+
+pre{
+white-space:pre;
+font-family:monospace;
+margin:0;
+padding:0;
+}
+
+/* CENTER ASCII */
 
 .center-ascii{
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-opacity:.09;
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
 pointer-events:none;
 z-index:-1;
+opacity:.08;
 animation:pulse 3s ease-in-out infinite;
 }
 
 .center-ascii pre{
+text-align:center;
 font-size:7px;
 line-height:7px;
 color:#ff7b00;
@@ -78,20 +92,20 @@ text-shadow:0 0 14px rgba(255,106,0,.5);
 
 @keyframes pulse{
 0%{
-opacity:.07;
+opacity:.06;
 transform:translate(-50%,-50%) scale(1);
 }
 50%{
-opacity:.13;
-transform:translate(-50%,-50%) scale(1.015);
+opacity:.12;
+transform:translate(-50%,-50%) scale(1.01);
 }
 100%{
-opacity:.07;
+opacity:.06;
 transform:translate(-50%,-50%) scale(1);
 }
 }
 
-/* BOOT SCREEN */
+/* BOOT */
 
 #boot{
 position:fixed;
@@ -101,14 +115,21 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+text-align:center;
+overflow:hidden;
 z-index:9999;
 }
 
 .boot-logo{
+display:flex;
+justify-content:center;
+align-items:center;
+width:100%;
 animation:bootFloat 3s ease-in-out infinite;
 }
 
 .boot-logo pre{
+text-align:center;
 font-size:8px;
 line-height:8px;
 color:#ff7b00;
@@ -131,15 +152,19 @@ opacity:.9;
 }
 
 .boot-title{
-margin-top:30px;
-font-size:42px;
-letter-spacing:14px;
+margin-top:34px;
+font-size:52px;
+letter-spacing:16px;
+text-align:center;
 color:#ff7b00;
-text-shadow:0 0 22px rgba(255,106,0,.5);
+text-shadow:
+0 0 12px rgba(255,106,0,.6),
+0 0 28px rgba(255,106,0,.45),
+0 0 50px rgba(255,106,0,.25);
 }
 
 .enter-btn{
-margin-top:40px;
+margin-top:42px;
 padding:14px 34px;
 background:rgba(255,106,0,.08);
 border:1px solid rgba(255,106,0,.35);
@@ -303,6 +328,14 @@ max-height:560px;
 overflow-y:auto;
 }
 
+.window-body::-webkit-scrollbar{
+width:6px;
+}
+
+.window-body::-webkit-scrollbar-thumb{
+background:#ff6a00;
+}
+
 /* TERMINAL */
 
 .terminal{
@@ -327,7 +360,7 @@ color:#ff7b00;
 font-family:inherit;
 }
 
-/* VIDEOS */
+/* VIDEO */
 
 .video-item{
 padding:12px;
@@ -343,29 +376,10 @@ background:rgba(255,106,0,.08);
 padding-left:18px;
 }
 
-/* VIDEO PLAYER */
-
 .video-player video{
 width:100%;
 max-height:520px;
 background:#000;
-}
-
-/* SCROLLBAR */
-
-.window-body::-webkit-scrollbar{
-width:6px;
-}
-
-.window-body::-webkit-scrollbar-thumb{
-background:#ff6a00;
-}
-
-/* ASCII */
-
-pre{
-white-space:pre;
-font-family:monospace;
 }
 
 </style>
@@ -378,91 +392,27 @@ font-family:monospace;
 <div class="center-ascii">
 
 <pre>
+                 ███████╗ ██╗    ██╗  █████╗  ████████╗
+                 ██╔════╝ ██║    ██║ ██╔══██╗ ╚══██╔══╝
+                 ███████╗ ██║ █╗ ██║ ███████║    ██║
+                 ╚════██║ ██║███╗██║ ██╔══██║    ██║
+                 ███████║ ╚███╔███╔╝ ██║  ██║    ██║
+                 ╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝    ╚═╝
 
+                    ██████╗  ██████╗ ██████╗ ██╗   ██╗
+                    ██╔══██╗██╔═══██╗██╔══██╗╚██╗ ██╔╝
+                    ██████╔╝██║   ██║██║  ██║ ╚████╔╝
+                    ██╔══██╗██║   ██║██║  ██║  ╚██╔╝
+                    ██████╔╝╚██████╔╝██████╔╝   ██║
+                    ╚═════╝  ╚═════╝ ╚═════╝    ╚═╝
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                              -N#DB:DN%N- -N%H:-N#B
-                                                      -N#++- -@WW WN%WWW= +WWW=NWW%:-N#++--+-
-                                           -NN+**B=*HW@WW#W+ HWW+HWW*WWN-BNNWW%@WWW-DWW-W#+WM@%*D::=HB
-                                          :NWW%WW*WWDWWWWW*HBDK-WWWWWWW* HWWWWWWW#=DB* *W@HBWW@W+@+WWW#-
-                                         :HHWWW8WWK=+=MWWWWW#:WWWWWWWWW# HWWWWWWWWW* 8WWWWWW:N*DW*WWWWW+
-                                         -+BDNWWWWW%:WWWWWWWWHBN- -+#WW% :*%#K  -N#DBWWWWWWWWD#WWWWWK D+
-                                         *WW@WWWWWWW#+:N88WWWW*@WWW+WWW#   -@WWWW8: :*NK    -N@WWWWWWWW#
-                                         @WWWW##NWWWWWW+  -WWW#WWWW+WWW-   NWWWWWWH   KWWWWWWWW%88@WWWW8
-                                        :WWWWW8+WWWNH--*-  NWWWWW%WWWW=N8#+WWW++WWW-  -N8@WWW@#-  8WWWW8
-                                        BWWWWW8K+KWWWWWW-N# WWWWWKWWWWBWWW=WWWWWWWWM=MN- 8WWW8-N#-8WWWW8
-                                        BWWWWW8+WWWWWWW@-WW+#WWW@HWWWHKWWWHWWW8@WWWW#WW+ #WWWN+WW+8WWWW8
-                                        :WWWWW8-*++++-+-H --B-N++K+N:MW +- +D-KKB+H D * +--K H:HN-8WWWW@
-                                        BWWWWW8 #W8W-WWMWW-WNW+=WWK+W WW W:WW W WKKWWW#*W#W:WWWH  8WWWW8
-                                        :WWWWW8 NWWW*@WWWM*WW*-+W@D-K@#D+KWKD:+KKKDW8WW-WWW+%WWW  8WWWW8
-                                        :WWWWW8 -#8N--NM= -NN-    N8M#WWWWWWWW88%%MH +=+##+ -NMK  8WWWW8
-                                        BWWWWW8               -#8WWWWWWWW@WWWWWWWWWWW8#B          8WWWW@
-                                        :WWWWW8            -N8WWWWWWWWWW#WWWWWWWWWWWWWWW8N-       8WWWW8
-                                        :WWWWW8          +#%WWWWWWWWWWWWWWWNWWWWWWWWWWWWWW@-      8WWWW8
-                                        BWWWWW8         KWWW@WWW#K-      -NBD=DDB K#WWWWWWWW8N-   8WWWW@
-                                        :WWWWW@       -#WWWWWWW*KWWWWWWWMWWW#*W*WWWHW@W:WWWWWW@-  8WWWW8
-                                        :WWWWW8       NWWWWWDWW8W*WM%M%WWWMWWBW#WWWDW8%WW@WWWWW@- 8WWWW8
-                                        :WWWWW8       @W@WNW8*WWWW#=WWWWWWWWWK:D +- WWHMWWWWWWWWN 8WWWW8
-                                         WWWWW8       *W@W8-WWWWWWWWWWWWWWWWWWWWW*WM  =#+ 8@#WWWN 8WWWW@
-                                        :WWWWW8      BWWWWWW8WWWWWWW*WWM@W#WWWWWWWWWWWWWWW+ B8W@- 8WWWW8
-                                         WWWWW8      -KWWW%WW W=WWWWWWWWWWWW@8%%%88WWWM88NB  -+B  8WWWW8
-                                         WWWWW8      NW:WW@WW@WWWWWWWWWWWWWWWWWWMWWWWWB           8WWWW8
-                                         8WWWW8      *WWMMW@WWWWWWWWWWWWWWWWWWWWWWWWWW-           8WWWW@
-                                         8W WWW:    :N=%WWWWWWWWWWW*WWWWWWWWWWWWWWWWWWN          BWWW W8
-                                         #WWWWWH   MK%+:H#M=K*%WW%WWWWWWWWWWWWWWWWWWWWWB         *WWWWW#
-                                         B@W+WW@K  +WW*  :*WW=BB+W=WWW@W%WWWWWW#WWWWWWWN        -WWW+W@B
-                                          -*W-WWW#-B=HB  -W8@:%+DDK-@WNK+*8W@WW*@WW*WWWN       =WWW-W*-
-                                           -*W*WWW@-     :=*W-D= *- -+-   NWK*+#N+N%*:-N888888@WWW+W*-
-                                            -NWWWWWWN:+B:  :    B- BN888@8#KWWWWWWWWWWWWWWWWWWWWWWW*B
-                                             BN%W@WWW@HWB   KBK =M8@WWWWWWWWWWWWWWWWWWWWW W WWWDWWN-
-                                               -=MWNWWW#MN- -=N8WWWWWWWWWWWWWWWWWW888@WWWWWWW=WWH-
-                                                 -+*WWWWWWWMWWWWWWWWWWWWWWWW@888#:-KHNN8WWWMWW**B
-                                                   -N@WWNWWWWWWWWWWWWW888%HD KM8#HWWWWWWKWWNHK
-                                                     B#N*WW=WWWNW+-+--N@8@WW8WWWW%WWWKWW%N#B
-                                                        -N##WW=WWWW#W8WWWWWWWWWWWWKWW%N#D
-                                                          -H **WWW#WWWWHWHWWWW8WWW** H-
-                                                          +WW+-NN-#WWW=WWWKWWWD:*N-+WW+
-                                                          -N#-  =WKK8N*WWW*#8K*W=  -N#-
-                                                                HWWK  D8W8+  KWW=
-                                                                B#N-  -WWW+  BHH
-                                                                      :H%#-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                 ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ ███████╗
+                 ██╔══██╗██║   ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝
+                 ██████╔╝██║   ██║███████║██████╔╝██║  ██║███████╗
+                 ██╔══██╗██║   ██║██╔══██║██╔══██╗██║  ██║╚════██║
+                 ██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝███████║
+                 ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝
 </pre>
-
 
 </div>
 
@@ -473,96 +423,25 @@ font-family:monospace;
 <div class="boot-logo">
 
 <pre>
+                 ███████╗ ██╗    ██╗  █████╗  ████████╗
+                 ██╔════╝ ██║    ██║ ██╔══██╗ ╚══██╔══╝
+                 ███████╗ ██║ █╗ ██║ ███████║    ██║
+                 ╚════██║ ██║███╗██║ ██╔══██║    ██║
+                 ███████║ ╚███╔███╔╝ ██║  ██║    ██║
+                 ╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝    ╚═╝
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                              -N#DB:DN%N- -N%H:-N#B
-                                                      -N#++- -@WW WN%WWW= +WWW=NWW%:-N#++--+-
-                                           -NN+**B=*HW@WW#W+ HWW+HWW*WWN-BNNWW%@WWW-DWW-W#+WM@%*D::=HB
-                                          :NWW%WW*WWDWWWWW*HBDK-WWWWWWW* HWWWWWWW#=DB* *W@HBWW@W+@+WWW#-
-                                         :HHWWW8WWK=+=MWWWWW#:WWWWWWWWW# HWWWWWWWWW* 8WWWWWW:N*DW*WWWWW+
-                                         -+BDNWWWWW%:WWWWWWWWHBN- -+#WW% :*%#K  -N#DBWWWWWWWWD#WWWWWK D+
-                                         *WW@WWWWWWW#+:N88WWWW*@WWW+WWW#   -@WWWW8: :*NK    -N@WWWWWWWW#
-                                         @WWWW##NWWWWWW+  -WWW#WWWW+WWW-   NWWWWWWH   KWWWWWWWW%88@WWWW8
-                                        :WWWWW8+WWWNH--*-  NWWWWW%WWWW=N8#+WWW++WWW-  -N8@WWW@#-  8WWWW8
-                                        BWWWWW8K+KWWWWWW-N# WWWWWKWWWWBWWW=WWWWWWWWM=MN- 8WWW8-N#-8WWWW8
-                                        BWWWWW8+WWWWWWW@-WW+#WWW@HWWWHKWWWHWWW8@WWWW#WW+ #WWWN+WW+8WWWW8
-                                        :WWWWW8-*++++-+-H --B-N++K+N:MW +- +D-KKB+H D * +--K H:HN-8WWWW@
-                                        BWWWWW8 #W8W-WWMWW-WNW+=WWK+W WW W:WW W WKKWWW#*W#W:WWWH  8WWWW8
-                                        :WWWWW8 NWWW*@WWWM*WW*-+W@D-K@#D+KWKD:+KKKDW8WW-WWW+%WWW  8WWWW8
-                                        :WWWWW8 -#8N--NM= -NN-    N8M#WWWWWWWW88%%MH +=+##+ -NMK  8WWWW8
-                                        BWWWWW8               -#8WWWWWWWW@WWWWWWWWWWW8#B          8WWWW@
-                                        :WWWWW8            -N8WWWWWWWWWW#WWWWWWWWWWWWWWW8N-       8WWWW8
-                                        :WWWWW8          +#%WWWWWWWWWWWWWWWNWWWWWWWWWWWWWW@-      8WWWW8
-                                        BWWWWW8         KWWW@WWW#K-      -NBD=DDB K#WWWWWWWW8N-   8WWWW@
-                                        :WWWWW@       -#WWWWWWW*KWWWWWWWMWWW#*W*WWWHW@W:WWWWWW@-  8WWWW8
-                                        :WWWWW8       NWWWWWDWW8W*WM%M%WWWMWWBW#WWWDW8%WW@WWWWW@- 8WWWW8
-                                        :WWWWW8       @W@WNW8*WWWW#=WWWWWWWWWK:D +- WWHMWWWWWWWWN 8WWWW8
-                                         WWWWW8       *W@W8-WWWWWWWWWWWWWWWWWWWWW*WM  =#+ 8@#WWWN 8WWWW@
-                                        :WWWWW8      BWWWWWW8WWWWWWW*WWM@W#WWWWWWWWWWWWWWW+ B8W@- 8WWWW8
-                                         WWWWW8      -KWWW%WW W=WWWWWWWWWWWW@8%%%88WWWM88NB  -+B  8WWWW8
-                                         WWWWW8      NW:WW@WW@WWWWWWWWWWWWWWWWWWMWWWWWB           8WWWW8
-                                         8WWWW8      *WWMMW@WWWWWWWWWWWWWWWWWWWWWWWWWW-           8WWWW@
-                                         8W WWW:    :N=%WWWWWWWWWWW*WWWWWWWWWWWWWWWWWWN          BWWW W8
-                                         #WWWWWH   MK%+:H#M=K*%WW%WWWWWWWWWWWWWWWWWWWWWB         *WWWWW#
-                                         B@W+WW@K  +WW*  :*WW=BB+W=WWW@W%WWWWWW#WWWWWWWN        -WWW+W@B
-                                          -*W-WWW#-B=HB  -W8@:%+DDK-@WNK+*8W@WW*@WW*WWWN       =WWW-W*-
-                                           -*W*WWW@-     :=*W-D= *- -+-   NWK*+#N+N%*:-N888888@WWW+W*-
-                                            -NWWWWWWN:+B:  :    B- BN888@8#KWWWWWWWWWWWWWWWWWWWWWWW*B
-                                             BN%W@WWW@HWB   KBK =M8@WWWWWWWWWWWWWWWWWWWWW W WWWDWWN-
-                                               -=MWNWWW#MN- -=N8WWWWWWWWWWWWWWWWWW888@WWWWWWW=WWH-
-                                                 -+*WWWWWWWMWWWWWWWWWWWWWWWW@888#:-KHNN8WWWMWW**B
-                                                   -N@WWNWWWWWWWWWWWWW888%HD KM8#HWWWWWWKWWNHK
-                                                     B#N*WW=WWWNW+-+--N@8@WW8WWWW%WWWKWW%N#B
-                                                        -N##WW=WWWW#W8WWWWWWWWWWWWKWW%N#D
-                                                          -H **WWW#WWWWHWHWWWW8WWW** H-
-                                                          +WW+-NN-#WWW=WWWKWWWD:*N-+WW+
-                                                          -N#-  =WKK8N*WWW*#8K*W=  -N#-
-                                                                HWWK  D8W8+  KWW=
-                                                                B#N-  -WWW+  BHH
-                                                                      :H%#-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    ██████╗  ██████╗ ██████╗ ██╗   ██╗
+                    ██╔══██╗██╔═══██╗██╔══██╗╚██╗ ██╔╝
+                    ██████╔╝██║   ██║██║  ██║ ╚████╔╝
+                    ██╔══██╗██║   ██║██║  ██║  ╚██╔╝
+                    ██████╔╝╚██████╔╝██████╔╝   ██║
+                    ╚═════╝  ╚═════╝ ╚═════╝    ╚═╝
 </pre>
-
 
 </div>
 
 <div class="boot-title">
-S.W.A.T
+S.W.A.T BODYGUARDS
 </div>
 
 <button class="enter-btn" onclick="openLogin()">
@@ -596,8 +475,6 @@ AUTHENTICATE
 <!-- DESKTOP -->
 
 <div id="desktop">
-
-<!-- FOLDERS -->
 
 <div class="sidebar">
 
@@ -637,37 +514,27 @@ AUTHENTICATE
 
 <script>
 
-/* MAIN PASSWORD */
-
 const systemPassword = "swat2026@"
-
-/* VIDEOS */
 
 const database = {
 
 LEONES:[
 "videos/leones/training-alpha.mp4",
 "videos/leones/night-raid.mp4",
-"videos/leones/extraction.mp4",
-"videos/leones/patrol.mp4",
-"videos/leones/intel-briefing.mp4"
+"videos/leones/extraction.mp4"
 ],
 
 AGUILAS:[
 "videos/aguilas/eagle-eye.mp4",
-"videos/aguilas/air-watch.mp4",
-"videos/aguilas/operation-7.mp4"
+"videos/aguilas/air-watch.mp4"
 ],
 
 COBRAS:[
 "videos/cobras/urban-entry.mp4",
-"videos/cobras/night-combat.mp4",
-"videos/cobras/perimeter-check.mp4"
+"videos/cobras/night-combat.mp4"
 ]
 
 }
-
-/* OPEN LOGIN */
 
 function openLogin(){
 
@@ -675,8 +542,6 @@ document.getElementById("boot").style.display = "none"
 document.getElementById("loginScreen").style.display = "flex"
 
 }
-
-/* LOGIN */
 
 function login(){
 
@@ -694,8 +559,6 @@ alert("ACCESS DENIED")
 }
 
 }
-
-/* WINDOW SYSTEM */
 
 let z = 20
 
@@ -741,8 +604,6 @@ return win
 
 }
 
-/* DRAG */
-
 function dragWindow(win){
 
 const header = win.querySelector(".window-header")
@@ -778,8 +639,6 @@ win.style.top = (e.clientY - offsetY) + "px"
 }
 
 }
-
-/* OPEN FOLDER */
 
 function openFolder(name,password){
 
@@ -828,8 +687,6 @@ alert("INVALID KEY")
 
 }
 
-/* SHOW VIDEOS */
-
 function showVideos(name){
 
 const videos = database[name]
@@ -860,8 +717,6 @@ ${file}
 createWindow(name + " FILES", html)
 
 }
-
-/* OPEN VIDEO */
 
 function openVideo(src,title){
 
