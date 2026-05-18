@@ -4,21 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>TACTICAL INTELLIGENCE SYSTEM</title>
+<title>BODYGUARDS OSINT HUD</title>
 
 <link href="https://fonts.cdnfonts.com/css/thegoodmonolith" rel="stylesheet">
 
 <style>
 
 :root{
---bg:#0a0a0a;
---panel:#111111dd;
---border:#ff5b2e;
---text:#f3ede9;
---muted:#8f8f8f;
---orange:#ff5b2e;
---orangeSoft:#ff8c42;
---glow:0 0 12px rgba(255,91,46,.4);
+--orange:#ff6a00;
+--orangeSoft:rgba(255,106,0,.15);
+--orangeBorder:rgba(255,106,0,.35);
+--bg:#050505;
+--panel:rgba(12,12,12,.72);
+--text:#f2f2f2;
 }
 
 *{
@@ -28,37 +26,58 @@ box-sizing:border-box;
 }
 
 body{
-overflow:hidden;
 background:#000;
 font-family:"TheGoodMonolith", monospace;
-color:var(--text);
+overflow:hidden;
+color:white;
 height:100vh;
 }
 
-/* ========================= */
 /* BACKGROUND */
-/* ========================= */
 
-.background-logo{
+body::before{
+content:"";
 position:fixed;
 inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-pointer-events:none;
-opacity:.035;
-z-index:0;
+background:
+radial-gradient(circle at center,
+rgba(255,106,0,.09),
+transparent 60%),
+linear-gradient(rgba(255,106,0,.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,106,0,.04) 1px, transparent 1px);
+background-size:100% 100%, 40px 40px, 40px 40px;
+z-index:-2;
 }
 
-.background-logo pre{
+/* CENTRAL LOGO */
+
+.center-logo{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+opacity:.12;
+pointer-events:none;
+z-index:-1;
+text-align:center;
+}
+
+.center-logo pre{
 font-size:8px;
 line-height:8px;
-color:#ff5b2e;
+color:#ff7b00;
+text-shadow:0 0 12px rgba(255,106,0,.45);
 }
 
-/* ========================= */
+.center-logo h1{
+margin-top:20px;
+font-size:42px;
+letter-spacing:12px;
+color:#ff7b00;
+text-shadow:0 0 25px rgba(255,106,0,.5);
+}
+
 /* BOOT SCREEN */
-/* ========================= */
 
 #bootScreen{
 position:fixed;
@@ -68,36 +87,21 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-z-index:99999;
+z-index:9999;
 overflow:hidden;
-}
-
-.scanlines{
-position:absolute;
-inset:0;
-background:
-repeating-linear-gradient(
-to bottom,
-rgba(255,255,255,.03),
-rgba(255,255,255,.03) 1px,
-transparent 1px,
-transparent 3px
-);
-pointer-events:none;
-mix-blend-mode:overlay;
 }
 
 .glitch{
 position:relative;
-animation:flicker .12s infinite;
+animation:glitch 0.15s infinite;
 }
 
 .glitch::before,
 .glitch::after{
 content:attr(data-text);
 position:absolute;
-top:0;
 left:0;
+top:0;
 width:100%;
 overflow:hidden;
 }
@@ -105,368 +109,291 @@ overflow:hidden;
 .glitch::before{
 left:2px;
 text-shadow:-2px 0 red;
-animation:glitch1 .25s infinite linear alternate-reverse;
+clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+opacity:.7;
 }
 
 .glitch::after{
 left:-2px;
-text-shadow:2px 0 blue;
-animation:glitch2 .25s infinite linear alternate-reverse;
+text-shadow:2px 0 cyan;
+clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
+opacity:.7;
 }
 
-@keyframes flicker{
-0%{opacity:1;}
-50%{opacity:.94;}
-100%{opacity:1;}
+@keyframes glitch{
+0%{transform:translate(0)}
+20%{transform:translate(-2px,2px)}
+40%{transform:translate(-2px,-2px)}
+60%{transform:translate(2px,2px)}
+80%{transform:translate(2px,-2px)}
+100%{transform:translate(0)}
 }
 
-@keyframes glitch1{
-0%{clip-path:inset(0 0 80% 0);}
-100%{clip-path:inset(70% 0 0 0);}
-}
-
-@keyframes glitch2{
-0%{clip-path:inset(60% 0 0 0);}
-100%{clip-path:inset(0 0 50% 0);}
-}
-
-#ascii{
+.boot-logo{
+color:#ff7b00;
 font-size:8px;
 line-height:8px;
-color:var(--orange);
 white-space:pre;
-text-align:center;
-margin-bottom:40px;
+text-shadow:0 0 10px rgba(255,106,0,.7);
+}
+
+.boot-title{
+margin-top:25px;
+font-size:42px;
+letter-spacing:10px;
+color:#ff7b00;
 }
 
 .enter-btn{
-padding:12px 26px;
-background:transparent;
-border:1px solid var(--orange);
-color:var(--orange);
-cursor:pointer;
+margin-top:40px;
+padding:14px 35px;
+background:rgba(255,106,0,.1);
+border:1px solid rgba(255,106,0,.4);
+color:#ff7b00;
 font-family:inherit;
-font-size:14px;
+cursor:pointer;
+font-size:15px;
 transition:.2s;
 }
 
 .enter-btn:hover{
-background:rgba(255,91,46,.12);
-box-shadow:var(--glow);
+background:rgba(255,106,0,.2);
+box-shadow:0 0 20px rgba(255,106,0,.25);
 }
 
-/* ========================= */
 /* LOGIN */
-/* ========================= */
 
-#loginScreen{
+#loginOverlay{
 position:fixed;
 inset:0;
-background:black;
+background:rgba(0,0,0,.94);
 display:none;
 justify-content:center;
 align-items:center;
-z-index:9999;
+z-index:9998;
 }
 
 .login-box{
 width:420px;
-background:var(--panel);
-border:1px solid var(--border);
-padding:24px;
-backdrop-filter:blur(12px);
-box-shadow:var(--glow);
+background:rgba(10,10,10,.95);
+border:1px solid rgba(255,106,0,.35);
+padding:30px;
+box-shadow:0 0 30px rgba(255,106,0,.15);
 }
 
 .login-title{
-margin-bottom:20px;
-color:var(--orange);
-font-size:14px;
+font-size:18px;
+margin-bottom:25px;
+color:#ff7b00;
 }
 
-.terminal-line{
-margin-bottom:14px;
-font-size:13px;
-}
-
-.input{
+.login-box input{
 width:100%;
+margin-bottom:15px;
+padding:14px;
 background:black;
-border:1px solid var(--border);
-padding:12px;
-color:var(--orangeSoft);
+border:1px solid rgba(255,106,0,.25);
+color:#ff7b00;
 font-family:inherit;
 outline:none;
 }
 
 .login-btn{
-margin-top:18px;
 width:100%;
-padding:12px;
-background:transparent;
-border:1px solid var(--border);
-color:var(--orange);
+padding:14px;
+background:rgba(255,106,0,.12);
+border:1px solid rgba(255,106,0,.35);
+color:#ff7b00;
 cursor:pointer;
 font-family:inherit;
 }
 
-.login-btn:hover{
-background:rgba(255,91,46,.12);
-}
-
-/* ========================= */
-/* DESKTOP */
-/* ========================= */
+/* DASHBOARD */
 
 #desktop{
 display:none;
 width:100%;
 height:100vh;
+padding:30px;
 position:relative;
-overflow:hidden;
 }
 
-.topbar{
-height:40px;
-border-bottom:1px solid rgba(255,91,46,.25);
+/* SIDEBAR */
+
+.sidebar{
+position:absolute;
+left:30px;
+top:40px;
 display:flex;
-align-items:center;
-padding:0 14px;
-background:#0c0c0cee;
-position:relative;
+flex-direction:column;
+gap:24px;
 z-index:5;
 }
 
-.topbar-title{
-color:var(--orange);
-font-size:12px;
-letter-spacing:2px;
-}
-
-/* ========================= */
-/* FOLDERS */
-/* ========================= */
-
-.desktop-area{
-position:relative;
-width:100%;
-height:calc(100vh - 40px);
-padding:20px;
-}
-
-.folder-grid{
-display:flex;
-gap:24px;
-flex-wrap:wrap;
-}
+/* FOLDER */
 
 .folder{
-width:110px;
-cursor:pointer;
-text-align:center;
-}
-
-.folder-icon{
-width:90px;
-height:70px;
-margin:auto;
-border:1px solid rgba(255,91,46,.5);
-background:
-linear-gradient(
-180deg,
-rgba(255,91,46,.18),
-rgba(255,91,46,.05)
-);
 display:flex;
+flex-direction:column;
 align-items:center;
-justify-content:center;
-font-size:34px;
-box-shadow:var(--glow);
+cursor:pointer;
+width:90px;
 transition:.2s;
 }
 
-.folder:hover .folder-icon{
-transform:translateY(-3px);
-background:rgba(255,91,46,.18);
+.folder:hover{
+transform:translateX(4px);
 }
 
-.folder-label{
-margin-top:10px;
-font-size:12px;
-color:var(--orangeSoft);
+.folder svg{
+width:62px;
+height:62px;
+fill:rgba(255,106,0,.42);
+filter:drop-shadow(0 0 12px rgba(255,106,0,.25));
 }
 
-/* ========================= */
+.folder span{
+margin-top:8px;
+font-size:11px;
+color:#ff7b00;
+text-align:center;
+}
+
 /* WINDOWS */
-/* ========================= */
 
 .window{
 position:absolute;
-width:520px;
-background:var(--panel);
-border:1px solid var(--border);
-backdrop-filter:blur(14px);
-box-shadow:0 0 20px rgba(255,91,46,.2);
-z-index:100;
+width:500px;
+background:rgba(12,12,12,.94);
+border:1px solid rgba(255,106,0,.35);
+backdrop-filter:blur(8px);
+box-shadow:0 0 35px rgba(255,106,0,.12);
 overflow:hidden;
 resize:both;
 }
 
 .window-header{
 height:42px;
-background:#0d0d0d;
-border-bottom:1px solid rgba(255,91,46,.2);
+background:rgba(255,106,0,.08);
 display:flex;
-align-items:center;
 justify-content:space-between;
-padding:0 12px;
+align-items:center;
+padding:0 14px;
 cursor:move;
+border-bottom:1px solid rgba(255,106,0,.2);
 }
 
 .window-title{
 font-size:12px;
-color:var(--orange);
+color:#ff7b00;
 }
 
-.window-buttons{
-display:flex;
-gap:8px;
-}
-
-.win-btn{
-width:22px;
-height:22px;
-border:1px solid var(--border);
-background:transparent;
-color:var(--orange);
+.window-close{
+background:none;
+border:none;
+color:#ff7b00;
 cursor:pointer;
-font-size:11px;
-}
-
-.win-btn:hover{
-background:rgba(255,91,46,.15);
+font-size:18px;
 }
 
 .window-body{
-padding:14px;
-max-height:500px;
-overflow:auto;
+padding:16px;
+max-height:520px;
+overflow-y:auto;
 }
 
-/* ========================= */
-/* TERMINAL AUTH */
-/* ========================= */
+/* TERMINAL */
 
-.auth-terminal{
-font-size:12px;
-line-height:1.7;
-}
-
-.auth-input{
-margin-top:12px;
-width:100%;
-padding:12px;
+.terminal{
 background:black;
-border:1px solid var(--border);
-color:var(--orange);
+padding:16px;
+border:1px solid rgba(255,106,0,.2);
+min-height:150px;
+}
+
+.terminal-line{
+margin-bottom:10px;
+font-size:12px;
+color:#ff7b00;
+}
+
+.terminal input{
+width:100%;
+background:none;
+border:none;
+outline:none;
+color:#ff7b00;
 font-family:inherit;
 }
 
-/* ========================= */
 /* VIDEO LIST */
-/* ========================= */
-
-.video-list{
-display:flex;
-flex-direction:column;
-gap:10px;
-max-height:420px;
-overflow-y:auto;
-padding-right:6px;
-}
 
 .video-item{
 padding:12px;
-border:1px solid rgba(255,91,46,.2);
+border-bottom:1px solid rgba(255,106,0,.12);
 cursor:pointer;
 transition:.2s;
 font-size:12px;
 }
 
 .video-item:hover{
-background:rgba(255,91,46,.1);
+background:rgba(255,106,0,.08);
+padding-left:18px;
 }
 
-/* ========================= */
 /* PLAYER */
-/* ========================= */
 
 .video-player{
 width:100%;
-height:420px;
-background:black;
 }
 
 .video-player video{
 width:100%;
-height:100%;
-object-fit:contain;
+max-height:500px;
 background:black;
 }
 
-/* ========================= */
-/* SCROLL */
-/* ========================= */
+/* SCROLLBAR */
 
-::-webkit-scrollbar{
-width:8px;
-height:8px;
+.window-body::-webkit-scrollbar{
+width:6px;
 }
 
-::-webkit-scrollbar-track{
-background:#111;
+.window-body::-webkit-scrollbar-thumb{
+background:#ff6a00;
 }
-
-::-webkit-scrollbar-thumb{
-background:var(--orange);
-}
-
-/* ========================= */
 
 </style>
 </head>
+
 <body>
 
-<!-- BACKGROUND ASCII -->
-
-<div class="background-logo">
-<pre>
-
-█████████████████████████████████████████████████████████████████████
-███████████████████ TACTICAL INTELLIGENCE NODE ██████████████████████
-█████████████████████████████████████████████████████████████████████
-
-</pre>
-</div>
-
-<!-- BOOT SCREEN -->
+<!-- BOOT -->
 
 <div id="bootScreen">
 
-<div class="scanlines"></div>
+<div class="glitch" data-text="BODYGUARDS">
 
-<pre id="ascii" class="glitch" data-text="TACTICAL">
-
-████████╗ █████╗  ██████╗████████╗██╗ ██████╗ █████╗ ██╗
-╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝██║██╔════╝██╔══██╗██║
-   ██║   ███████║██║        ██║   ██║██║     ███████║██║
-   ██║   ██╔══██║██║        ██║   ██║██║     ██╔══██║██║
-   ██║   ██║  ██║╚██████╗   ██║   ██║╚██████╗██║  ██║███████╗
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
-
+<pre class="boot-logo">
+.:^.:!7!7!!7!~~::.
+..:^^~7?7J!~YY!!YYJ5JJJJJYJJJ!!??7!^^::
+~J?7YJJJJYYY5YPP555YYYY5555PP55YJ?JJ?JJJJJ7
+:7JY555PP5YJJY!~57:P7 :PP~^~!?Y5555PP5Y?^
+7P&Y!YG5P7 :&YJ@#J@^ P##G ^YPB55!^7&G5
+YP@~ PB5BP.. Y@@J#@G.!:!@GP@J :. ?@J. :@GP
+YP@~ JPJGP^P7.GG ?P~:P~J5^^YP^P7 !&!.5!:@GP
+YP@~ ?5Y!?J!YJ7~Y!7JY^Y!?^P!^P5^YJ77Y?.:@GP
+YP@~ 7J7^77:77~ 7 ^!7^??~!~~:!!:77^~?! :@GP
+YP@~ :7PBB##&#BG5?~ :@GP
+YP@~ !YG&@#BGP5G#@@@@@#P7. :@GP
+YP@~ !G&#PPY?~~~::~!7J5G##&P7: :@GP
 </pre>
 
-<button class="enter-btn" onclick="openLogin()">
+</div>
+
+<div class="boot-title">BODYGUARDS</div>
+
+<button class="enter-btn" onclick="showLogin()">
 ENTER SYSTEM
 </button>
 
@@ -474,26 +401,19 @@ ENTER SYSTEM
 
 <!-- LOGIN -->
 
-<div id="loginScreen">
+<div id="loginOverlay">
 
 <div class="login-box">
 
 <div class="login-title">
-TACTICAL AUTHENTICATION NODE
+SECURE ACCESS TERMINAL
 </div>
 
-<div class="terminal-line">
-USER: ADMIN
-</div>
+<input id="userInput" placeholder="ADMIN" value="admin">
 
-<input
-id="mainPassword"
-class="input"
-type="password"
-placeholder="ENTER PASSWORD"
-/>
+<input id="passInput" type="password" placeholder="PASSWORD">
 
-<button class="login-btn" onclick="login()">
+<button class="login-btn" onclick="loginSystem()">
 AUTHENTICATE
 </button>
 
@@ -501,34 +421,59 @@ AUTHENTICATE
 
 </div>
 
-<!-- DESKTOP -->
+<!-- DASHBOARD -->
 
 <div id="desktop">
 
-<div class="topbar">
-<div class="topbar-title">
-TACTICAL VIDEO INTELLIGENCE ENVIRONMENT
-</div>
-</div>
+<!-- CENTER LOGO -->
 
-<div class="desktop-area">
+<div class="center-logo">
 
-<div class="folder-grid">
+<pre>
+.:^.:!7!7!!7!~~::.
+..:^^~7?7J!~YY!!YYJ5JJJJJYJJJ!!??7!^^::
+~J?7YJJJJYYY5YPP555YYYY5555PP55YJ?JJ?JJJJJ7
+:7JY555PP5YJJY!~57:P7 :PP~^~!?Y5555PP5Y?^
+7P&Y!YG5P7 :&YJ@#J@^ P##G ^YPB55!^7&G5
+YP@~ PB5BP.. Y@@J#@G.!:!@GP@J :. ?@J. :@GP
+YP@~ JPJGP^P7.GG ?P~:P~J5^^YP^P7 !&!.5!:@GP
+</pre>
 
-<div class="folder" onclick="openFolder('LEONES','2026diciplin@')">
-<div class="folder-icon">📁</div>
-<div class="folder-label">LEONES</div>
-</div>
+<h1>BODYGUARDS</h1>
 
-<div class="folder" onclick="openFolder('AGUILAS','honor@gilas')">
-<div class="folder-icon">📁</div>
-<div class="folder-label">AGUILAS</div>
 </div>
 
-<div class="folder" onclick="openFolder('COBRAS','cobr@as2026')">
-<div class="folder-icon">📁</div>
-<div class="folder-label">COBRAS</div>
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="folder" onclick="openFolder('Leones','2026diciplin@')">
+
+<svg viewBox="0 0 24 24">
+<path d="M10 4l2 2h8v12H4V4z"/>
+</svg>
+
+<span>LEONES</span>
+
 </div>
+
+<div class="folder" onclick="openFolder('Aguilas','honor@gilas')">
+
+<svg viewBox="0 0 24 24">
+<path d="M10 4l2 2h8v12H4V4z"/>
+</svg>
+
+<span>AGUILAS</span>
+
+</div>
+
+<div class="folder" onclick="openFolder('Cobras','cobr@as2026')">
+
+<svg viewBox="0 0 24 24">
+<path d="M10 4l2 2h8v12H4V4z"/>
+</svg>
+
+<span>COBRAS</span>
 
 </div>
 
@@ -538,28 +483,49 @@ TACTICAL VIDEO INTELLIGENCE ENVIRONMENT
 
 <script>
 
-/* ========================= */
-/* LOGIN */
-/* ========================= */
+const systemPassword = "swat2026@"
 
-function openLogin(){
+const videoDatabase = {
 
-document.getElementById("bootScreen").style.display="none"
-document.getElementById("loginScreen").style.display="flex"
+Leones:[
+"videos/leones/mission-alpha.mp4",
+"videos/leones/extraction-01.mp4",
+"videos/leones/training-night.mp4",
+"videos/leones/surveillance.mp4"
+],
+
+Aguilas:[
+"videos/aguilas/eagle-cam.mp4",
+"videos/aguilas/perimeter.mp4",
+"videos/aguilas/intel-brief.mp4"
+],
+
+Cobras:[
+"videos/cobras/raid-unit.mp4",
+"videos/cobras/urban-entry.mp4",
+"videos/cobras/night-ops.mp4"
+]
 
 }
 
-function login(){
+function showLogin(){
 
-const pass =
-document.getElementById("mainPassword").value
+document.getElementById("bootScreen").style.display="none"
+document.getElementById("loginOverlay").style.display="flex"
 
-if(pass === "swat2026@"){
+}
 
-document.getElementById("loginScreen").style.display="none"
+function loginSystem(){
+
+const pass = document.getElementById("passInput").value
+
+if(pass === systemPassword){
+
+document.getElementById("loginOverlay").style.display="none"
 document.getElementById("desktop").style.display="block"
 
-}else{
+}
+else{
 
 alert("ACCESS DENIED")
 
@@ -567,64 +533,9 @@ alert("ACCESS DENIED")
 
 }
 
-/* ========================= */
-/* VIDEO DATABASE */
-/* ========================= */
-
-const videoDatabase = {
-
-LEONES:[
-{
-name:"Operacion_Leones_01.mp4",
-src:"videos/leones/video1.mp4"
-},
-{
-name:"Operacion_Leones_02.mp4",
-src:"videos/leones/video2.mp4"
-},
-{
-name:"Operacion_Leones_03.mp4",
-src:"videos/leones/video3.mp4"
-}
-],
-
-AGUILAS:[
-{
-name:"Aguilas_Tactical_01.mp4",
-src:"videos/aguilas/video1.mp4"
-},
-{
-name:"Aguilas_Tactical_02.mp4",
-src:"videos/aguilas/video2.mp4"
-}
-],
-
-COBRAS:[
-{
-name:"Cobras_Node_01.mp4",
-src:"videos/cobras/video1.mp4"
-},
-{
-name:"Cobras_Node_02.mp4",
-src:"videos/cobras/video2.mp4"
-},
-{
-name:"Cobras_Node_03.mp4",
-src:"videos/cobras/video3.mp4"
-},
-{
-name:"Cobras_Node_04.mp4",
-src:"videos/cobras/video4.mp4"
-}
-]
-
-}
-
-/* ========================= */
 /* WINDOWS */
-/* ========================= */
 
-let z = 100
+let z = 10
 
 function createWindow(title, content){
 
@@ -632,50 +543,27 @@ const win = document.createElement("div")
 
 win.className = "window"
 
-win.style.left =
-(100 + Math.random()*220) + "px"
-
-win.style.top =
-(80 + Math.random()*120) + "px"
+win.style.left = (160 + Math.random()*180)+"px"
+win.style.top = (80 + Math.random()*100)+"px"
 
 win.style.zIndex = ++z
 
 win.innerHTML = `
-
 <div class="window-header">
-
-<div class="window-title">
-${title}
-</div>
-
-<div class="window-buttons">
-
-<button class="win-btn close-btn">
-X
-</button>
-
-</div>
-
+<div class="window-title">${title}</div>
+<button class="window-close">×</button>
 </div>
 
 <div class="window-body">
 ${content}
 </div>
-
 `
 
 document.body.appendChild(win)
 
-/* CLOSE */
+const closeBtn = win.querySelector(".window-close")
 
-win.querySelector(".close-btn")
-.addEventListener("click",()=>{
-
-win.remove()
-
-})
-
-/* DRAG */
+closeBtn.onclick = () => win.remove()
 
 dragWindow(win)
 
@@ -683,158 +571,139 @@ return win
 
 }
 
-/* ========================= */
 /* DRAG */
-/* ========================= */
 
 function dragWindow(win){
 
 const header = win.querySelector(".window-header")
 
-let isDragging = false
 let offsetX = 0
 let offsetY = 0
+let isDown = false
 
-header.addEventListener("mousedown",(e)=>{
+header.onmousedown = e => {
 
-isDragging = true
+isDown = true
 
 offsetX = e.clientX - win.offsetLeft
 offsetY = e.clientY - win.offsetTop
 
 win.style.zIndex = ++z
 
-})
+}
 
-document.addEventListener("mousemove",(e)=>{
+document.onmouseup = () => {
 
-if(!isDragging) return
-
-win.style.left =
-(e.clientX - offsetX) + "px"
-
-win.style.top =
-(e.clientY - offsetY) + "px"
-
-})
-
-document.addEventListener("mouseup",()=>{
-
-isDragging = false
-
-})
+isDown = false
 
 }
 
-/* ========================= */
-/* FOLDER AUTH */
-/* ========================= */
+document.onmousemove = e => {
 
-function openFolder(folderName, password){
+if(!isDown) return
+
+win.style.left = (e.clientX - offsetX)+"px"
+win.style.top = (e.clientY - offsetY)+"px"
+
+}
+
+}
+
+/* OPEN FOLDER */
+
+function openFolder(name,password){
 
 const content = `
 
-<div class="auth-terminal">
+<div class="terminal">
 
-<div>> AUTHORIZATION REQUIRED</div>
-<div>> UNIT: ${folderName}</div>
-<div>> ENTER ACCESS KEY</div>
+<div class="terminal-line">
+SECURE DIRECTORY: ${name.toUpperCase()}
+</div>
 
-<input
-type="password"
-class="auth-input"
-id="folderPassword"
-/>
+<div class="terminal-line">
+ENTER ACCESS KEY:
+</div>
 
-<button
-class="login-btn"
-onclick="verifyFolderPassword(
-'${folderName}',
-'${password}',
-this
-)">
-UNLOCK
-</button>
+<input type="password" id="folderPass">
 
 </div>
 
 `
 
-createWindow(folderName + " NODE", content)
+const win = createWindow(name + " DIRECTORY", content)
+
+const input = win.querySelector("#folderPass")
+
+input.focus()
+
+input.addEventListener("keydown", e => {
+
+if(e.key === "Enter"){
+
+if(input.value === password){
+
+showVideoList(name)
+
+win.remove()
+
+}
+else{
+
+alert("INVALID KEY")
 
 }
 
-/* ========================= */
-/* VERIFY PASSWORD */
-/* ========================= */
+}
 
-function verifyFolderPassword(folder, pass, btn){
-
-const win = btn.closest(".window")
-
-const input =
-win.querySelector("#folderPassword").value
-
-if(input !== pass){
-
-alert("INVALID ACCESS KEY")
-return
+})
 
 }
 
-const videos = videoDatabase[folder]
+/* VIDEO LIST */
 
-let html = `
-<div class="video-list">
-`
+function showVideoList(name){
+
+const videos = videoDatabase[name] || []
+
+let html = `<div style="font-size:12px;color:#ff7b00;margin-bottom:10px">
+FILES FOUND: ${videos.length}
+</div>`
 
 videos.forEach(v=>{
 
+const filename = v.split("/").pop()
+
 html += `
+<div class="video-item"
+onclick="openVideo('${v}','${filename}')">
 
-<div
-class="video-item"
-onclick="openVideo(
-'${v.name}',
-'${v.src}'
-)"
->
-
-${v.name}
+${filename}
 
 </div>
-
 `
 
 })
 
-html += "</div>"
-
-win.querySelector(".window-body").innerHTML = html
+createWindow(name + " FILES", html)
 
 }
 
-/* ========================= */
-/* VIDEO PLAYER */
-/* ========================= */
+/* OPEN VIDEO */
 
-function openVideo(name, src){
+function openVideo(src,title){
 
-const content = `
-
+const html = `
 <div class="video-player">
 
 <video controls autoplay>
-
 <source src="${src}" type="video/mp4">
-
 </video>
 
 </div>
-
 `
 
-createWindow(name, content)
+createWindow(title, html)
 
 }
 
