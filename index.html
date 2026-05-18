@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>TACTICAL INTELLIGENCE SYSTEM</title>
+
+<link href="https://fonts.cdnfonts.com/css/thegoodmonolith" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#0a0a0a;
+--panel:#111111dd;
+--border:#ff5b2e;
+--text:#f3ede9;
+--muted:#8f8f8f;
+--orange:#ff5b2e;
+--orangeSoft:#ff8c42;
+--glow:0 0 12px rgba(255,91,46,.4);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+background:#000;
+font-family:"TheGoodMonolith", monospace;
+color:var(--text);
+height:100vh;
+}
+
+/* ========================= */
+/* BACKGROUND */
+/* ========================= */
+
+.background-logo{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+pointer-events:none;
+opacity:.035;
+z-index:0;
+}
+
+.background-logo pre{
+font-size:8px;
+line-height:8px;
+color:#ff5b2e;
+}
+
+/* ========================= */
+/* BOOT SCREEN */
+/* ========================= */
+
+#bootScreen{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:99999;
+overflow:hidden;
+}
+
+.scanlines{
+position:absolute;
+inset:0;
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,.03),
+rgba(255,255,255,.03) 1px,
+transparent 1px,
+transparent 3px
+);
+pointer-events:none;
+mix-blend-mode:overlay;
+}
+
+.glitch{
+position:relative;
+animation:flicker .12s infinite;
+}
+
+.glitch::before,
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+top:0;
+left:0;
+width:100%;
+overflow:hidden;
+}
+
+.glitch::before{
+left:2px;
+text-shadow:-2px 0 red;
+animation:glitch1 .25s infinite linear alternate-reverse;
+}
+
+.glitch::after{
+left:-2px;
+text-shadow:2px 0 blue;
+animation:glitch2 .25s infinite linear alternate-reverse;
+}
+
+@keyframes flicker{
+0%{opacity:1;}
+50%{opacity:.94;}
+100%{opacity:1;}
+}
+
+@keyframes glitch1{
+0%{clip-path:inset(0 0 80% 0);}
+100%{clip-path:inset(70% 0 0 0);}
+}
+
+@keyframes glitch2{
+0%{clip-path:inset(60% 0 0 0);}
+100%{clip-path:inset(0 0 50% 0);}
+}
+
+#ascii{
+font-size:8px;
+line-height:8px;
+color:var(--orange);
+white-space:pre;
+text-align:center;
+margin-bottom:40px;
+}
+
+.enter-btn{
+padding:12px 26px;
+background:transparent;
+border:1px solid var(--orange);
+color:var(--orange);
+cursor:pointer;
+font-family:inherit;
+font-size:14px;
+transition:.2s;
+}
+
+.enter-btn:hover{
+background:rgba(255,91,46,.12);
+box-shadow:var(--glow);
+}
+
+/* ========================= */
+/* LOGIN */
+/* ========================= */
+
+#loginScreen{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.login-box{
+width:420px;
+background:var(--panel);
+border:1px solid var(--border);
+padding:24px;
+backdrop-filter:blur(12px);
+box-shadow:var(--glow);
+}
+
+.login-title{
+margin-bottom:20px;
+color:var(--orange);
+font-size:14px;
+}
+
+.terminal-line{
+margin-bottom:14px;
+font-size:13px;
+}
+
+.input{
+width:100%;
+background:black;
+border:1px solid var(--border);
+padding:12px;
+color:var(--orangeSoft);
+font-family:inherit;
+outline:none;
+}
+
+.login-btn{
+margin-top:18px;
+width:100%;
+padding:12px;
+background:transparent;
+border:1px solid var(--border);
+color:var(--orange);
+cursor:pointer;
+font-family:inherit;
+}
+
+.login-btn:hover{
+background:rgba(255,91,46,.12);
+}
+
+/* ========================= */
+/* DESKTOP */
+/* ========================= */
+
+#desktop{
+display:none;
+width:100%;
+height:100vh;
+position:relative;
+overflow:hidden;
+}
+
+.topbar{
+height:40px;
+border-bottom:1px solid rgba(255,91,46,.25);
+display:flex;
+align-items:center;
+padding:0 14px;
+background:#0c0c0cee;
+position:relative;
+z-index:5;
+}
+
+.topbar-title{
+color:var(--orange);
+font-size:12px;
+letter-spacing:2px;
+}
+
+/* ========================= */
+/* FOLDERS */
+/* ========================= */
+
+.desktop-area{
+position:relative;
+width:100%;
+height:calc(100vh - 40px);
+padding:20px;
+}
+
+.folder-grid{
+display:flex;
+gap:24px;
+flex-wrap:wrap;
+}
+
+.folder{
+width:110px;
+cursor:pointer;
+text-align:center;
+}
+
+.folder-icon{
+width:90px;
+height:70px;
+margin:auto;
+border:1px solid rgba(255,91,46,.5);
+background:
+linear-gradient(
+180deg,
+rgba(255,91,46,.18),
+rgba(255,91,46,.05)
+);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+box-shadow:var(--glow);
+transition:.2s;
+}
+
+.folder:hover .folder-icon{
+transform:translateY(-3px);
+background:rgba(255,91,46,.18);
+}
+
+.folder-label{
+margin-top:10px;
+font-size:12px;
+color:var(--orangeSoft);
+}
+
+/* ========================= */
+/* WINDOWS */
+/* ========================= */
+
+.window{
+position:absolute;
+width:520px;
+background:var(--panel);
+border:1px solid var(--border);
+backdrop-filter:blur(14px);
+box-shadow:0 0 20px rgba(255,91,46,.2);
+z-index:100;
+overflow:hidden;
+resize:both;
+}
+
+.window-header{
+height:42px;
+background:#0d0d0d;
+border-bottom:1px solid rgba(255,91,46,.2);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 12px;
+cursor:move;
+}
+
+.window-title{
+font-size:12px;
+color:var(--orange);
+}
+
+.window-buttons{
+display:flex;
+gap:8px;
+}
+
+.win-btn{
+width:22px;
+height:22px;
+border:1px solid var(--border);
+background:transparent;
+color:var(--orange);
+cursor:pointer;
+font-size:11px;
+}
+
+.win-btn:hover{
+background:rgba(255,91,46,.15);
+}
+
+.window-body{
+padding:14px;
+max-height:500px;
+overflow:auto;
+}
+
+/* ========================= */
+/* TERMINAL AUTH */
+/* ========================= */
+
+.auth-terminal{
+font-size:12px;
+line-height:1.7;
+}
+
+.auth-input{
+margin-top:12px;
+width:100%;
+padding:12px;
+background:black;
+border:1px solid var(--border);
+color:var(--orange);
+font-family:inherit;
+}
+
+/* ========================= */
+/* VIDEO LIST */
+/* ========================= */
+
+.video-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:420px;
+overflow-y:auto;
+padding-right:6px;
+}
+
+.video-item{
+padding:12px;
+border:1px solid rgba(255,91,46,.2);
+cursor:pointer;
+transition:.2s;
+font-size:12px;
+}
+
+.video-item:hover{
+background:rgba(255,91,46,.1);
+}
+
+/* ========================= */
+/* PLAYER */
+/* ========================= */
+
+.video-player{
+width:100%;
+height:420px;
+background:black;
+}
+
+.video-player video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+/* ========================= */
+/* SCROLL */
+/* ========================= */
+
+::-webkit-scrollbar{
+width:8px;
+height:8px;
+}
+
+::-webkit-scrollbar-track{
+background:#111;
+}
+
+::-webkit-scrollbar-thumb{
+background:var(--orange);
+}
+
+/* ========================= */
+
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND ASCII -->
+
+<div class="background-logo">
+<pre>
+
+█████████████████████████████████████████████████████████████████████
+███████████████████ TACTICAL INTELLIGENCE NODE ██████████████████████
+█████████████████████████████████████████████████████████████████████
+
+</pre>
+</div>
+
+<!-- BOOT SCREEN -->
+
+<div id="bootScreen">
+
+<div class="scanlines"></div>
+
+<pre id="ascii" class="glitch" data-text="TACTICAL">
+
+████████╗ █████╗  ██████╗████████╗██╗ ██████╗ █████╗ ██╗
+╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝██║██╔════╝██╔══██╗██║
+   ██║   ███████║██║        ██║   ██║██║     ███████║██║
+   ██║   ██╔══██║██║        ██║   ██║██║     ██╔══██║██║
+   ██║   ██║  ██║╚██████╗   ██║   ██║╚██████╗██║  ██║███████╗
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
+
+</pre>
+
+<button class="enter-btn" onclick="openLogin()">
+ENTER SYSTEM
+</button>
+
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+<div class="login-box">
+
+<div class="login-title">
+TACTICAL AUTHENTICATION NODE
+</div>
+
+<div class="terminal-line">
+USER: ADMIN
+</div>
+
+<input
+id="mainPassword"
+class="input"
+type="password"
+placeholder="ENTER PASSWORD"
+/>
+
+<button class="login-btn" onclick="login()">
+AUTHENTICATE
+</button>
+
+</div>
+
+</div>
+
+<!-- DESKTOP -->
+
+<div id="desktop">
+
+<div class="topbar">
+<div class="topbar-title">
+TACTICAL VIDEO INTELLIGENCE ENVIRONMENT
+</div>
+</div>
+
+<div class="desktop-area">
+
+<div class="folder-grid">
+
+<div class="folder" onclick="openFolder('LEONES','2026diciplin@')">
+<div class="folder-icon">📁</div>
+<div class="folder-label">LEONES</div>
+</div>
+
+<div class="folder" onclick="openFolder('AGUILAS','honor@gilas')">
+<div class="folder-icon">📁</div>
+<div class="folder-label">AGUILAS</div>
+</div>
+
+<div class="folder" onclick="openFolder('COBRAS','cobr@as2026')">
+<div class="folder-icon">📁</div>
+<div class="folder-label">COBRAS</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* ========================= */
+/* LOGIN */
+/* ========================= */
+
+function openLogin(){
+
+document.getElementById("bootScreen").style.display="none"
+document.getElementById("loginScreen").style.display="flex"
+
+}
+
+function login(){
+
+const pass =
+document.getElementById("mainPassword").value
+
+if(pass === "swat2026@"){
+
+document.getElementById("loginScreen").style.display="none"
+document.getElementById("desktop").style.display="block"
+
+}else{
+
+alert("ACCESS DENIED")
+
+}
+
+}
+
+/* ========================= */
+/* VIDEO DATABASE */
+/* ========================= */
+
+const videoDatabase = {
+
+LEONES:[
+{
+name:"Operacion_Leones_01.mp4",
+src:"videos/leones/video1.mp4"
+},
+{
+name:"Operacion_Leones_02.mp4",
+src:"videos/leones/video2.mp4"
+},
+{
+name:"Operacion_Leones_03.mp4",
+src:"videos/leones/video3.mp4"
+}
+],
+
+AGUILAS:[
+{
+name:"Aguilas_Tactical_01.mp4",
+src:"videos/aguilas/video1.mp4"
+},
+{
+name:"Aguilas_Tactical_02.mp4",
+src:"videos/aguilas/video2.mp4"
+}
+],
+
+COBRAS:[
+{
+name:"Cobras_Node_01.mp4",
+src:"videos/cobras/video1.mp4"
+},
+{
+name:"Cobras_Node_02.mp4",
+src:"videos/cobras/video2.mp4"
+},
+{
+name:"Cobras_Node_03.mp4",
+src:"videos/cobras/video3.mp4"
+},
+{
+name:"Cobras_Node_04.mp4",
+src:"videos/cobras/video4.mp4"
+}
+]
+
+}
+
+/* ========================= */
+/* WINDOWS */
+/* ========================= */
+
+let z = 100
+
+function createWindow(title, content){
+
+const win = document.createElement("div")
+
+win.className = "window"
+
+win.style.left =
+(100 + Math.random()*220) + "px"
+
+win.style.top =
+(80 + Math.random()*120) + "px"
+
+win.style.zIndex = ++z
+
+win.innerHTML = `
+
+<div class="window-header">
+
+<div class="window-title">
+${title}
+</div>
+
+<div class="window-buttons">
+
+<button class="win-btn close-btn">
+X
+</button>
+
+</div>
+
+</div>
+
+<div class="window-body">
+${content}
+</div>
+
+`
+
+document.body.appendChild(win)
+
+/* CLOSE */
+
+win.querySelector(".close-btn")
+.addEventListener("click",()=>{
+
+win.remove()
+
+})
+
+/* DRAG */
+
+dragWindow(win)
+
+return win
+
+}
+
+/* ========================= */
+/* DRAG */
+/* ========================= */
+
+function dragWindow(win){
+
+const header = win.querySelector(".window-header")
+
+let isDragging = false
+let offsetX = 0
+let offsetY = 0
+
+header.addEventListener("mousedown",(e)=>{
+
+isDragging = true
+
+offsetX = e.clientX - win.offsetLeft
+offsetY = e.clientY - win.offsetTop
+
+win.style.zIndex = ++z
+
+})
+
+document.addEventListener("mousemove",(e)=>{
+
+if(!isDragging) return
+
+win.style.left =
+(e.clientX - offsetX) + "px"
+
+win.style.top =
+(e.clientY - offsetY) + "px"
+
+})
+
+document.addEventListener("mouseup",()=>{
+
+isDragging = false
+
+})
+
+}
+
+/* ========================= */
+/* FOLDER AUTH */
+/* ========================= */
+
+function openFolder(folderName, password){
+
+const content = `
+
+<div class="auth-terminal">
+
+<div>> AUTHORIZATION REQUIRED</div>
+<div>> UNIT: ${folderName}</div>
+<div>> ENTER ACCESS KEY</div>
+
+<input
+type="password"
+class="auth-input"
+id="folderPassword"
+/>
+
+<button
+class="login-btn"
+onclick="verifyFolderPassword(
+'${folderName}',
+'${password}',
+this
+)">
+UNLOCK
+</button>
+
+</div>
+
+`
+
+createWindow(folderName + " NODE", content)
+
+}
+
+/* ========================= */
+/* VERIFY PASSWORD */
+/* ========================= */
+
+function verifyFolderPassword(folder, pass, btn){
+
+const win = btn.closest(".window")
+
+const input =
+win.querySelector("#folderPassword").value
+
+if(input !== pass){
+
+alert("INVALID ACCESS KEY")
+return
+
+}
+
+const videos = videoDatabase[folder]
+
+let html = `
+<div class="video-list">
+`
+
+videos.forEach(v=>{
+
+html += `
+
+<div
+class="video-item"
+onclick="openVideo(
+'${v.name}',
+'${v.src}'
+)"
+>
+
+${v.name}
+
+</div>
+
+`
+
+})
+
+html += "</div>"
+
+win.querySelector(".window-body").innerHTML = html
+
+}
+
+/* ========================= */
+/* VIDEO PLAYER */
+/* ========================= */
+
+function openVideo(name, src){
+
+const content = `
+
+<div class="video-player">
+
+<video controls autoplay>
+
+<source src="${src}" type="video/mp4">
+
+</video>
+
+</div>
+
+`
+
+createWindow(name, content)
+
+}
+
+</script>
+
+</body>
+</html>
