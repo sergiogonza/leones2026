@@ -368,6 +368,77 @@ white-space:pre;
 font-family:monospace;
 }
 
+
+
+
+<!-- ========================= -->
+<!-- -->
+<!-- ========================= -->
+
+
+/* NEWS FEED */
+
+.news-terminal{
+background:#000;
+border:1px solid rgba(255,106,0,.15);
+padding:14px;
+}
+
+.news-header{
+color:#ff7b00;
+font-size:12px;
+margin-bottom:14px;
+padding-bottom:10px;
+border-bottom:1px solid rgba(255,106,0,.12);
+letter-spacing:1px;
+}
+
+.news-item{
+padding:14px;
+margin-bottom:10px;
+border:1px solid rgba(255,106,0,.08);
+background:rgba(255,106,0,.03);
+transition:.2s;
+cursor:pointer;
+}
+
+.news-item:hover{
+background:rgba(255,106,0,.08);
+transform:translateX(4px);
+}
+
+.news-time{
+font-size:10px;
+color:rgba(255,106,0,.55);
+margin-bottom:7px;
+letter-spacing:1px;
+}
+
+.news-title{
+font-size:13px;
+color:#ff7b00;
+margin-bottom:8px;
+line-height:1.5;
+}
+
+.news-desc{
+font-size:11px;
+color:rgba(255,255,255,.72);
+line-height:1.6;
+}
+
+.news-alert{
+display:inline-block;
+padding:3px 8px;
+font-size:10px;
+border:1px solid rgba(255,106,0,.2);
+margin-bottom:10px;
+color:#ff7b00;
+background:rgba(255,106,0,.05);
+}
+
+
+  
 </style>
 </head>
 
@@ -547,6 +618,21 @@ AUTHENTICATE
 
 </div>
 
+  <!-- ========================= -->
+<!-- sidebar -->
+<!-- ========================= -->
+
+<div class="folder" onclick="openNewsWindow()">
+
+<svg viewBox="0 0 24 24">
+<path d="M4 4h16v16H4zM7 8h10v2H7zm0 4h10v2H7zm0 4h6v2H7z"/>
+</svg>
+
+<span>NEWS</span>
+
+</div>
+  
+
 </div>
 
 </div>
@@ -584,6 +670,103 @@ COBRAS:[
 
 }
 
+
+
+
+
+
+/* ========================= */
+/* under database */
+/* ========================= */
+
+const newsFeed = [
+
+{
+time:"20 MAY 2026 :: 21:03",
+title:"SWAT SURVEILLANCE GRID ACTIVE",
+desc:"Perimeter monitoring systems successfully synchronized across all tactical sectors."
+},
+
+{
+time:"20 MAY 2026 :: 20:41",
+title:"NIGHT OPERATION AUTHORIZED",
+desc:"Field teams received encrypted deployment packets for urban tactical exercises."
+},
+
+{
+time:"20 MAY 2026 :: 19:58",
+title:"INTELLIGENCE PACKAGE RECEIVED",
+desc:"New reconnaissance media uploaded into secured operational archives."
+},
+
+{
+time:"20 MAY 2026 :: 18:22",
+title:"COMMAND NODE ONLINE",
+desc:"Primary communications infrastructure restored with encrypted routing enabled."
+},
+
+{
+time:"20 MAY 2026 :: 17:49",
+title:"TACTICAL VIDEO DATABASE UPDATED",
+desc:"Multiple classified video records indexed inside LEONES division."
+}
+
+]
+
+/* ========================= */
+/* NEWS WINDOW */
+/* ========================= */
+
+function openNewsWindow(){
+
+let html = `
+
+<div class="news-terminal">
+
+<div class="news-header">
+LIVE INTELLIGENCE FEED
+</div>
+
+<div class="news-alert">
+SECURE CHANNEL ACTIVE
+</div>
+
+`
+
+newsFeed.forEach(news=>{
+
+html += `
+
+<div class="news-item">
+
+<div class="news-time">
+${news.time}
+</div>
+
+<div class="news-title">
+${news.title}
+</div>
+
+<div class="news-desc">
+${news.desc}
+</div>
+
+</div>
+
+`
+
+})
+
+html += `</div>`
+
+createWindow("TACTICAL NEWS FEED", html)
+
+}  
+  
+
+
+
+  
 /* OPEN LOGIN */
 
 function openLogin(){
