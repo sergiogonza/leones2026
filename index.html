@@ -289,13 +289,24 @@ letter-spacing:1px;
 color:#ff7b00;
 }
 
-.window-close{
+
+
+.window-minimize{
 background:none;
 border:none;
 color:#ff7b00;
-font-size:18px;
+font-size:16px;
 cursor:pointer;
+width:30px;
+height:30px;
+transition:.2s;
 }
+
+.window-minimize:hover{
+background:rgba(255,106,0,.08);
+}  
+
+  
 
 .window-body{
 padding:16px;
@@ -674,41 +685,80 @@ COBRAS:[
 
 
 
-
 /* ========================= */
-/* under database */
+/* UNDER database */
 /* ========================= */
 
 const newsFeed = [
 
 {
-time:"20 MAY 2026 :: 21:03",
-title:"SWAT SURVEILLANCE GRID ACTIVE",
-desc:"Perimeter monitoring systems successfully synchronized across all tactical sectors."
+time:"05 FEB 2026 :: 22:11",
+title:"DOS ESCOLTAS MUEREN EN ATENTADO A ESQUEMA DE SEGURIDAD",
+desc:"Ataque armado contra el esquema de seguridad del senador Jairo Castellanos en Arauca.",
+link:"https://senado.gov.co/index.php/el-senado/noticias/7140-dos-escoltas-mueren-en-atentado-al-senador-jairo-castellanos"
 },
 
 {
-time:"20 MAY 2026 :: 20:41",
-title:"NIGHT OPERATION AUTHORIZED",
-desc:"Field teams received encrypted deployment packets for urban tactical exercises."
+time:"06 FEB 2026 :: 01:47",
+title:"VIDEOS Y DETALLES DEL ASESINATO DE ESCOLTAS",
+desc:"Nuevos registros audiovisuales muestran el ataque ocurrido durante el desplazamiento hacia Yopal.",
+link:"https://www.noticiascaracol.com/colombia/los-videos-y-los-detalles-del-asesinato-de-escoltas-de-jairo-castellanos-mataron-a-mis-muchachos-rg10"
 },
 
 {
-time:"20 MAY 2026 :: 19:58",
-title:"INTELLIGENCE PACKAGE RECEIVED",
-desc:"New reconnaissance media uploaded into secured operational archives."
+time:"06 FEB 2026 :: 02:36",
+title:"REVELAN HIPOTESIS DEL ATAQUE AL ESQUEMA",
+desc:"Investigadores apuntan a estructuras armadas ilegales como responsables del atentado.",
+link:"https://www.noticiasrcn.com/colombia/revelan-las-hipotesis-detras-del-cruel-asesinato-del-esquema-de-seguridad-del-senador-jairo-castellanos-988778"
 },
 
 {
-time:"20 MAY 2026 :: 18:22",
-title:"COMMAND NODE ONLINE",
-desc:"Primary communications infrastructure restored with encrypted routing enabled."
+time:"09 DEC 2025 :: 18:42",
+title:"COSTO DE ESQUEMAS DE SEGURIDAD EN COLOMBIA",
+desc:"Informe sobre gastos operativos y logística de protección estatal.",
+link:"https://www.infobae.com/colombia/2025/12/09/el-precio-de-la-seguridad-en-colombia-esquema-promedio-le-cuesta-mas-de-45-millones-al-estado/"
 },
 
 {
-time:"20 MAY 2026 :: 17:49",
-title:"TACTICAL VIDEO DATABASE UPDATED",
-desc:"Multiple classified video records indexed inside LEONES division."
+time:"05 FEB 2026 :: 21:04",
+title:"ATENTADO CONTRA ESQUEMA DE SENADOR EN ARAUCA",
+desc:"Reportes iniciales confirman bajas dentro del equipo de protección.",
+link:"https://www.semana.com/politica/articulo/atentan-contra-el-esquema-del-senador-jairo-castellanos-en-arauca-un-escolta-habria-sido-asesinado/202637/"
+},
+
+{
+time:"04 DEC 2025 :: 23:20",
+title:"MADURO REFUERZA SEGURIDAD PERSONAL",
+desc:"Informes indican incremento de personal extranjero dentro del esquema presidencial.",
+link:"https://www.ntn24.com/noticias-actualidad/revelan-que-maduro-habria-aumentado-su-esquema-de-seguridad-con-cientos-de-cubanos-para-reducir-el-riesgo-de-traicion-593966"
+},
+
+{
+time:"12 FEB 2026 :: 13:52",
+title:"CONDENADOS ESCOLTAS POR TORTURA",
+desc:"Cinco integrantes de esquema de seguridad reciben sentencia judicial.",
+link:"https://www.infobae.com/colombia/2026/02/12/escoltas-de-la-familia-de-la-cantante-greeicy-rendon-fueron-condenados-a-12-anos-por-torturar-a-dos-trabajadores-tras-robo-de-caja-fuerte/"
+},
+
+{
+time:"06 FEB 2026 :: 07:14",
+title:"ATENTADO POLITICO DEJA DOS GUARDAESPALDAS MUERTOS",
+desc:"Autoridades refuerzan operaciones tácticas tras el ataque.",
+link:"https://www.exitosanoticias.pe/mundo/conmocion-politica-atentado-senador-dejo-dos-guardaespaldas-fallecidos-n168192"
+},
+
+{
+time:"19 JUL 2025 :: 11:43",
+title:"JEFE DE ESCOLTAS HABLA SOBRE FALLAS DE SEGURIDAD",
+desc:"Declaraciones sobre vulnerabilidades dentro de esquemas de protección.",
+link:"https://elpais.com/america-colombia/2025-07-19/augusto-rodriguez-jefe-de-escoltas-de-colombia-miguel-uribe-tomo-decisiones-que-debilitaron-su-esquema-de-seguridad.html"
+},
+
+{
+time:"09 JUN 2025 :: 16:18",
+title:"UNP NEGO REFUERZOS DE SEGURIDAD",
+desc:"Reportes revelan solicitudes rechazadas dentro de esquema político.",
+link:"https://caracol.com.co/2025/06/09/unp-nego-a-miguel-uribe-refuerzos-a-su-seguridad/"
 }
 
 ]
@@ -724,11 +774,11 @@ let html = `
 <div class="news-terminal">
 
 <div class="news-header">
-LIVE INTELLIGENCE FEED
+LIVE PROTECTION INTELLIGENCE FEED
 </div>
 
 <div class="news-alert">
-SECURE CHANNEL ACTIVE
+ENCRYPTED CHANNEL ACTIVE
 </div>
 
 `
@@ -751,6 +801,10 @@ ${news.title}
 ${news.desc}
 </div>
 
+<a href="${news.link}" target="_blank" class="news-link">
+OPEN REPORT
+</a>
+
 </div>
 
 `
@@ -759,11 +813,101 @@ ${news.desc}
 
 html += `</div>`
 
-createWindow("TACTICAL NEWS FEED", html)
+const win = createWindow("TACTICAL NEWS FEED", html, true)
 
-}  
+/* POSITION RIGHT SIDE */
+
+win.style.width = "430px"
+win.style.height = "85vh"
+win.style.right = "18px"
+win.style.left = "auto"
+win.style.top = "20px"
+
+}
+
+/* ========================= */
+/* REPLACE createWindow */
+/* ========================= */
+
+function createWindow(title, content, fixed=false){
+
+const win = document.createElement("div")
+
+win.className = "window"
+
+if(!fixed){
+
+win.style.left = (160 + Math.random()*160)+"px"
+win.style.top = (90 + Math.random()*120)+"px"
+
+}
+
+win.style.zIndex = ++z
+
+win.innerHTML = `
+
+<div class="window-header">
+
+<div class="window-title">
+${title}
+</div>
+
+<div style="display:flex;align-items:center;gap:10px;">
+
+<button class="window-minimize">
+▾
+</button>
+
+</div>
+
+</div>
+
+<div class="window-body">
+${content}
+</div>
+
+`
+
+document.body.appendChild(win)
+
+const minimizeBtn = win.querySelector(".window-minimize")
+const body = win.querySelector(".window-body")
+
+let minimized = false
+
+minimizeBtn.onclick = ()=>{
+
+minimized = !minimized
+
+if(minimized){
+
+body.style.display = "none"
+win.style.height = "42px"
+minimizeBtn.innerHTML = "▸"
+
+}else{
+
+body.style.display = "block"
+
+if(fixed){
+
+win.style.height = "85vh"
+
+}
+
+minimizeBtn.innerHTML = "▾"
+
+}
+
+}
+
+dragWindow(win)
+
+return win
+
+}
+
   
-
 
 
   
